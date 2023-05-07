@@ -17,7 +17,7 @@ public class Server extends Thread {
     private final Integer SOCKET_TIMEOUT = 1000;
     private Integer SERVER_PORT = 8090;
     private Integer THREAD_LIMIT = 2;
-    private Integer REJECT_THREAD_POOL = 2;
+    private final Integer REJECT_THREAD_POOL = 2;
     private Integer FULL_THREAD_POOL = THREAD_LIMIT + REJECT_THREAD_POOL;
     private final ServerSocket serverSocket;
     MessageBroker messageBroker = new MessageBroker();
@@ -67,7 +67,7 @@ public class Server extends Thread {
     @Override
     public void run() {
 
-        threadPoolExecutor = new ThreadPoolExecutor(FULL_THREAD_POOL,FULL_THREAD_POOL,10, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(FULL_THREAD_POOL),threadFactory);
+        threadPoolExecutor = new ThreadPoolExecutor(FULL_THREAD_POOL,FULL_THREAD_POOL,10, TimeUnit.SECONDS,new ArrayBlockingQueue<>(FULL_THREAD_POOL),threadFactory);
 
         try {
             this.serverSocket.setSoTimeout(SOCKET_TIMEOUT);

@@ -33,32 +33,4 @@ public class ClientFacadeLog {
     private ClientFacadeLog() {
     }
 
-
-
-//    private static Log logger = null;
-//    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM HH:mm:ss");
-//    private String fileNamePath;
-//    private Log() {
-//    }
-//
-//    public static Log getLogger() {
-//        if(logger == null) {
-//            synchronized(MessageMaker.class) {
-//                if (logger == null) {
-//                    logger = new Log();
-//                }
-//            }
-//        }
-//        return logger;
-//    }
-//
-//
-//
-//    public void setLogFileName(String logFilePath) {
-//        fileNamePath = logFilePath;
-//    }
-//
-//    public void log(String message) {
-//        simpleDateFormat.format(new Date())
-//    }
 }

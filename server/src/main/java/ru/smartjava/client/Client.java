@@ -3,7 +3,6 @@ package ru.smartjava.client;
 import ru.smartjava.server.config.ReadClientConfigFile;
 import ru.smartjava.server.converter.Converter;
 import ru.smartjava.server.logger.ClientFacadeLog;
-import ru.smartjava.server.logger.ClientLog;
 import ru.smartjava.server.messages.Message;
 import ru.smartjava.server.messages.MessageMaker;
 
@@ -139,7 +138,7 @@ public class Client {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        while(Objects.equals(userName, "")) {
+        while (Objects.equals(userName, "")) {
             System.out.println("Ваше имя для подключения к серверу");
             try {
                 userName = console.readLine();
@@ -160,7 +159,7 @@ public class Client {
         }
 
         Message initialMessage = messageMaker.connect(userName);
-        logger.info(messageMaker.logOutgoingMessage(initialMessage,userName));
+        logger.info(messageMaker.logOutgoingMessage(initialMessage, userName));
         out.println(converter.messageToJson(initialMessage));
         Thread incoming = new Thread(incomingThread);
         Thread outgoing = new Thread(outgoingThread);

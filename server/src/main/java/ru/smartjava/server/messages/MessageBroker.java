@@ -30,8 +30,6 @@ public class MessageBroker implements Runnable {
 
     public void sendEveryOneExceptSender(Message message) {
         for (Map.Entry<String, BlockingDeque<Message>> output : mapToClientQueue.entrySet()) {
-//            System.out.println("Send Everyone value " + message);
-//            logger.info(messageMaker.broadcastMessage(message));
             if (!Objects.equals(output.getKey(), message.getNickName())) {
                 output.getValue().offerFirst(message);
             }
@@ -48,31 +46,20 @@ public class MessageBroker implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-//            System.out.println(mapFromClientQueue.keySet().size());
             for (Map.Entry<String, BlockingDeque<Message>> input : mapFromClientQueue.entrySet()) {
-//                System.out.println(input.getKey());
                 try {
                     List<Message> messages = new ArrayList<>(input.getValue());
                     if (messages.size() > 0) {
                         input.getValue().removeAll(messages);
-//                        System.out.println(messages.size());
                         List<Message> commandsMessages = messages.stream().filter(Message::isCommand).collect(Collectors.toList());
 
                         messages.removeAll(commandsMessages);
                         for (Message command : commandsMessages) {
-//                            logger.info(command.toString());
-
                             mapToClientQueue.get(command.getNickName()).put(messageHandler.handle(command));
-//                            mapToClientQueue.get(command.getNickName()).put(command);
                             if(messageHandler.isClientExit(command)) {
                                 Message message = messageMaker.exitClientMessage(command.getNickName());
-//                                logger.info(messageMaker.logOutgoingMessage(message));
                                 messages.add(message);
                             }
-//                            else {
-//                                logger.info(messageMaker.logIncomingMessage(command));
-//                            }
-
                         }
                         messages.forEach(this::sendEveryOneExceptSender);
                     }

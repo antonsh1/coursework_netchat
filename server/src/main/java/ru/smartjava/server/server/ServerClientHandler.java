@@ -65,32 +65,21 @@ public class ServerClientHandler implements Runnable {
             Message response;
             if (reject) {
                 response = messageMaker.overSubscribe();
-//                System.out.println(response);
             } else {
-//            out.printf("Ваш порт %s%n", clientSocket.getPort());
-//            System.out.println(initialMessage);
                 response = messageHandler.handle(initialMessage);
                 clientName = response.getNickName();
-//                System.out.printf("Новое подключение к серверу %s:%s, %s%n", clientSocket.getInetAddress(), clientSocket.getPort(), clientName);
-//                logger.info("Открываем поток обработки клиента " + clientName);
-//                logger.info(String.format("Клиент %s подключение от %s:%s", clientName, clientSocket.getInetAddress(), clientSocket.getPort()));
-//                System.out.println(response);
             }
             messageMaker.logOutgoingMessage(response, clientName);
             if (!response.getDisconnect()) {
                 messageBroker.addClientQueues(initialMessage.getNickName(), fromClientQueue, toClientQueue);
                 messageBroker.sendEveryOneExceptSender(messageMaker.newClientMessage(clientName));
-//                fromClientQueue.addFirst(messageMaker.newClientMessage(clientName));
                 toClientQueue.addFirst(response);
                 boolean disconnect = response.getDisconnect();
-//                System.out.println(response);
                 while (!disconnect) {
-//                    System.out.println(clientName);
                     //Отправка
                     try {
                         toClientQueue.getLast();
                         Message send = toClientQueue.removeLast();
-//                        System.out.println("исходящее сообщение > " + send);
                         logger.info(messageMaker.logOutgoingMessage(send, clientName));
                         out.println(converter.messageToJson(send));
                         if (messageHandler.isClientExit(send)) {
@@ -105,11 +94,9 @@ public class ServerClientHandler implements Runnable {
                         if (Objects.equals(result, "null") || result == null) {
                             throw new SocketException("соединение разорвано");
                         } else {
-//                            System.out.println(">" + result);
                             Message incoming = converter.jsonToMessage(result);
                             messageMaker.logOutgoingMessage(incoming, clientName);
                             if (incoming.isCommand() || !Objects.equals(incoming.getMessage(), "")) {
-//                                System.out.println("Входящее сообщение >" + incoming);
                                 fromClientQueue.addFirst(incoming);
                             }
 
@@ -118,8 +105,6 @@ public class ServerClientHandler implements Runnable {
                 }
                 logger.info("Завершаем поток обработки клиента " + clientName);
             } else {
-//                System.out.println(converter.messageToJson(response));
-//                messageMaker.logOutgoingMessage(response, clientName);
                 out.println(converter.messageToJson(response));
             }
 

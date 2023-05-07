@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class ReadClientConfigFile {
 
-    private String configFilePath;
+    private final String configFilePath;
     private final String PORT_FIELD_NAME = "port";
     private final String HOST_FIELD_NAME = "host";
 

@@ -4,14 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.logging.Logger;
-import ru.smartjava.server.logger.ServerFacadeLog;
 
 public class ReadServerConfigFile {
 
     private final String SERVER_CONFIG_FILE_PATH = "server/src/main/resources/server.xml";
     private final String PORT_FIELD_NAME = "port";
-    private final String HOST_FIELD_NAME = "host";
     private final String THREAD_LIMIT_NAME = "threadLimit";
 
     Properties properties  = new Properties();
@@ -43,14 +40,6 @@ public class ReadServerConfigFile {
             System.out.println("Ошибка преобразования порта из файла конфигурации " + ne.getMessage());
         }
         return threadLimit;
-    }
-
-    public String host() {
-        String host = "";
-            if (!properties.getProperty(HOST_FIELD_NAME).isEmpty()) {
-                host = properties.getProperty(HOST_FIELD_NAME);
-            }
-        return host;
     }
 
     private Properties readFile(String filePath) {
