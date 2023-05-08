@@ -1,5 +1,7 @@
 package ru.smartjava.server.messages;
 
+import ru.smartjava.enums.Commands;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -75,11 +77,11 @@ public class MessageMaker {
     }
 
     public Message exitClientMessage(String nickName) {
-        return new Message(true, INFO_CMD, exitMessage(nickName), new Date(), SERVER_NAME, false);
+        return new Message(true, Commands.EXIT.toString(), exitMessage(nickName), new Date(), SERVER_NAME, false);
     }
 
     public Message newClientMessage(String nickName) {
-        return new Message(true, INFO_CMD, NEW_CLIENT + nickName, new Date(), nickName, false);
+        return new Message(true, Commands.EXIT.toString(), NEW_CLIENT + nickName, new Date(), nickName, false);
     }
 
     public Message message(String nickName, String message) {
@@ -87,7 +89,7 @@ public class MessageMaker {
     }
 
     public Message connect(String nickName) {
-        return new Message(true, CONNECT_CMD, EMPTY_STRING, new Date(), nickName, false);
+        return new Message(true, Commands.CONNECT.toString(), EMPTY_STRING, new Date(), nickName, false);
     }
 
     public Message clientCommand(String nickName, String command) {
@@ -95,7 +97,7 @@ public class MessageMaker {
     }
 
     public Message connectAccepted(String nickName) {
-        return new Message(true, CONNECT_CMD, connectAcceptedMessage(nickName), new Date(), nickName, false);
+        return new Message(true, Commands.CONNECT.toString(), connectAcceptedMessage(nickName), new Date(), nickName, false);
     }
 
     public Message disconnect(String nickName, String command) {
@@ -103,15 +105,16 @@ public class MessageMaker {
     }
 
     public Message connectRejected(String nickName) {
-        return new Message(true, CONNECT_CMD, connectRejectedMessage(nickName), new Date(), nickName, true);
+        return new Message(true, Commands.CONNECT.toString(), connectRejectedMessage(nickName), new Date(), nickName, true);
     }
 
     public Message wrongMessage(String command) {
-        return new Message(true, EMPTY_STRING, errorMessageString(command), new Date(), SERVER_NAME, false);
+        return new Message(true, Commands.EXIT.toString(), errorMessageString(command), new Date(), SERVER_NAME, false);
     }
 
     public Message overSubscribe() {
-        return new Message(true, CONNECT_CMD, OVER_SUBSCRIBE, new Date(), SERVER_NAME, true);
+        return new Message(true, Commands.CONNECT.toString(), OVER_SUBSCRIBE, new Date(), SERVER_NAME, true);
     }
+
 
 }

@@ -58,7 +58,7 @@ public class ServerClientHandler implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        logger.info(String.format("Открываем поток обработки подключение от %s:%s", clientSocket.getInetAddress(), clientSocket.getPort()));
+        logger.info(String.format("Открываем поток обработки подключения от %s:%s", clientSocket.getInetAddress(), clientSocket.getPort()));
         try {
             Message initialMessage = converter.jsonToMessage(in.readLine());
             logger.info(messageMaker.logIncomingMessage(initialMessage));
