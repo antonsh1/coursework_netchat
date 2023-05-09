@@ -1,4 +1,4 @@
-package ru.smartjava.params;
+package ru.smartjava.client.params;
 
 public class Defaults {
     public static final String SERVER_NAME = "Server";

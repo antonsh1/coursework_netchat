@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'ru.smartjava.client2'
+group = 'ru.smartjava.client'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -10,9 +10,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(':client'))
-    runtimeOnly(project(':client'))
-//    implementation project(':server')
+    implementation 'com.google.code.gson:gson:2.10.1'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

@@ -1,4 +1,4 @@
-package ru.smartjava.params;
+package ru.smartjava.server.params;
 
 public class Cmd {
     public static final String CONNECT = "connect";

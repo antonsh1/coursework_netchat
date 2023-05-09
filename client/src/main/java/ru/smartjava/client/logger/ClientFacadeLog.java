@@ -1,4 +1,4 @@
-package ru.smartjava.server.logger;
+package ru.smartjava.client.logger;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;

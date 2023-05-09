@@ -1,7 +1,7 @@
 package ru.smartjava.server.server;
 
-import ru.smartjava.interfaces.Broker;
-import ru.smartjava.params.Defaults;
+import ru.smartjava.server.interfaces.Broker;
+import ru.smartjava.server.params.Defaults;
 import ru.smartjava.server.messages.MessageBroker;
 
 import java.io.IOException;

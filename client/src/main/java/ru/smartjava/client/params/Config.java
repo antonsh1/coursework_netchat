@@ -1,4 +1,4 @@
-package ru.smartjava.params;
+package ru.smartjava.client.params;
 
 public class Config {
     public static final String SERVER_CONFIG_FILE_PATH = "server/src/main/resources/server.xml";

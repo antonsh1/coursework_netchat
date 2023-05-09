@@ -1,4 +1,4 @@
-package ru.smartjava.server.config;
+package ru.smartjava.client.config;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

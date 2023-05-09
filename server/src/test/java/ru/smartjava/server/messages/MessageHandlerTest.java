@@ -3,10 +3,10 @@ package ru.smartjava.server.messages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.smartjava.interfaces.Broker;
-import ru.smartjava.interfaces.Handler;
-import ru.smartjava.interfaces.Maker;
-import ru.smartjava.params.Cmd;
+import ru.smartjava.server.interfaces.Broker;
+import ru.smartjava.server.interfaces.Handler;
+import ru.smartjava.server.interfaces.Maker;
+import ru.smartjava.server.params.Cmd;
 
 public class MessageHandlerTest {
 

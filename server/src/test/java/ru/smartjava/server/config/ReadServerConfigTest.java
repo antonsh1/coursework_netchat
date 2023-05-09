@@ -2,7 +2,7 @@ package ru.smartjava.server.config;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.smartjava.params.Config;
+import ru.smartjava.server.params.Config;
 
 public class ReadServerConfigTest {
     private final int port = 8000;

@@ -1,8 +1,8 @@
-package ru.smartjava.server.messages;
+package ru.smartjava.client.messages;
 
-import ru.smartjava.server.interfaces.Maker;
-import ru.smartjava.server.params.Cmd;
-import ru.smartjava.server.params.Defaults;
+import ru.smartjava.client.interfaces.Maker;
+import ru.smartjava.client.params.Cmd;
+import ru.smartjava.client.params.Defaults;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -59,7 +59,7 @@ public class MessageMaker implements Maker {
     }
 
     public String connectAcceptedMessage(String nickname) {
-        return "Добро пожаловать " + nickname + "!";
+        return "Добро пожаловать " + nickname + "!\nДля отправки сообщения нажмите Enter.";
     }
 
     public String connectRejectedMessage(String nickname) {
@@ -100,7 +100,7 @@ public class MessageMaker implements Maker {
 
     public Message connectAccepted(String nickName) {
         Message message = new Message(true, Cmd.CONNECT, connectAcceptedMessage(nickName), new Date(), nickName, false);
-//        System.out.println(message);
+        System.out.println(message);
         return message;
     }
 

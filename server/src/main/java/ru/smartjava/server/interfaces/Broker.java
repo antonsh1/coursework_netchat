@@ -1,4 +1,4 @@
-package ru.smartjava.interfaces;
+package ru.smartjava.server.interfaces;
 
 import ru.smartjava.server.messages.Message;
 

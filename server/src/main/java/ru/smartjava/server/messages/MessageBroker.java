@@ -1,8 +1,8 @@
 package ru.smartjava.server.messages;
 
-import ru.smartjava.interfaces.Broker;
-import ru.smartjava.interfaces.Handler;
-import ru.smartjava.interfaces.Maker;
+import ru.smartjava.server.interfaces.Broker;
+import ru.smartjava.server.interfaces.Handler;
+import ru.smartjava.server.interfaces.Maker;
 import ru.smartjava.server.logger.ServerFacadeLog;
 
 import java.util.*;
@@ -57,7 +57,6 @@ public class MessageBroker implements Runnable, Broker {
                     if (messages.size() > 0) {
                         input.getValue().removeAll(messages);
                         List<Message> commandsMessages = messages.stream().filter(Message::isCommand).collect(Collectors.toList());
-
                         messages.removeAll(commandsMessages);
                         for (Message command : commandsMessages) {
                             mapToClientQueue.get(command.getNickName()).put(messageHandler.handle(command));

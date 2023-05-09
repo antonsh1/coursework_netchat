@@ -1,6 +1,6 @@
-package ru.smartjava.interfaces;
+package ru.smartjava.client.interfaces;
 
-import ru.smartjava.server.messages.Message;
+import ru.smartjava.client.messages.Message;
 
 public interface Maker {
 

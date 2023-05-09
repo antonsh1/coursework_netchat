@@ -1,6 +1,6 @@
-package ru.smartjava.server.config;
+package ru.smartjava.client.config;
 
-import ru.smartjava.params.Config;
+import ru.smartjava.client.params.Config;
 
 import java.io.IOException;
 import java.nio.file.Files;

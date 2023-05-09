@@ -1,9 +1,9 @@
-package ru.smartjava.server.messages;
+package ru.smartjava.client.messages;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.smartjava.server.interfaces.Maker;
-import ru.smartjava.server.params.Cmd;
+import ru.smartjava.client.interfaces.Maker;
+import ru.smartjava.client.params.Cmd;
 
 import java.util.Date;
 

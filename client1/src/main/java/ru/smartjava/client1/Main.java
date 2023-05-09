@@ -1,6 +1,6 @@
 package ru.smartjava.client1;
 
-import ru.smartjava.client.Client;
+import ru.smartjava.client.client.Client;
 
 public class Main {
     public static void main(String[] args) {

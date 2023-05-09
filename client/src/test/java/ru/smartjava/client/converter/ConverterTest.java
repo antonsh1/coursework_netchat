@@ -1,9 +1,9 @@
-package ru.smartjava.server.converter;
+package ru.smartjava.client.converter;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.smartjava.server.params.Cmd;
-import ru.smartjava.server.messages.Message;
+import ru.smartjava.client.messages.Message;
+import ru.smartjava.client.params.Cmd;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

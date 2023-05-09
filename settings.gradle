@@ -4,4 +4,5 @@ include 'client1'
 include 'client2'
 include 'client3'
 include 'client4'
+include 'client'
 

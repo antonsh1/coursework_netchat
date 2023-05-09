@@ -1,10 +1,11 @@
-package ru.smartjava.client3;
+package ru.smartjava.client;
 
 import ru.smartjava.client.client.Client;
 
 public class Main {
     public static void main(String[] args) {
-        Client client = new Client("client3");
+
+        Client client = new Client("client");
         client.start();
     }
 }

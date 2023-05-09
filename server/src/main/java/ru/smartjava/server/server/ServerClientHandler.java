@@ -1,8 +1,8 @@
 package ru.smartjava.server.server;
 
-import ru.smartjava.interfaces.Broker;
-import ru.smartjava.interfaces.Handler;
-import ru.smartjava.interfaces.Maker;
+import ru.smartjava.server.interfaces.Broker;
+import ru.smartjava.server.interfaces.Handler;
+import ru.smartjava.server.interfaces.Maker;
 import ru.smartjava.server.converter.Converter;
 import ru.smartjava.server.logger.ServerFacadeLog;
 import ru.smartjava.server.messages.Message;

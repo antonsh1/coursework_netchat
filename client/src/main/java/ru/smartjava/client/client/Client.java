@@ -1,12 +1,12 @@
-package ru.smartjava.client;
+package ru.smartjava.client.client;
 
-import ru.smartjava.interfaces.Maker;
-import ru.smartjava.params.Defaults;
-import ru.smartjava.server.config.ReadClientConfigFile;
-import ru.smartjava.server.converter.Converter;
-import ru.smartjava.server.logger.ClientFacadeLog;
-import ru.smartjava.server.messages.Message;
-import ru.smartjava.server.messages.MessageMaker;
+import ru.smartjava.client.config.ReadClientConfigFile;
+import ru.smartjava.client.converter.Converter;
+import ru.smartjava.client.interfaces.Maker;
+import ru.smartjava.client.logger.ClientFacadeLog;
+import ru.smartjava.client.messages.Message;
+import ru.smartjava.client.messages.MessageMaker;
+import ru.smartjava.client.params.Defaults;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +27,6 @@ public class Client {
     private final Maker messageMaker = MessageMaker.getMessageMaker();
     private final BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
     private AtomicBoolean connect = new AtomicBoolean(true);
-    private AtomicBoolean stop = new AtomicBoolean(false);
     private final Converter converter = Converter.getConverter();
     private final Runnable incomingThread = this::inputMessagesHandle;
     private final Runnable outgoingThread = this::outputMessagesHandle;
@@ -40,24 +39,13 @@ public class Client {
         while (connect.get()) {
             try {
                 String inputLine = console.readLine();
-                if (Objects.equals(inputLine, "")) {
-                    if (connect.get()) {
-                        stop = new AtomicBoolean(true);
-                        System.out.print("Введите Сообщение>");
-                        inputLine = console.readLine();
-                        stop = new AtomicBoolean(false);
-                    }
+                if (!inputLine.equals("")) {
                     if (inputLine.startsWith("/")) {
-//                        System.out.println("Команда " + inputLine.substring(1));
                         out.println(converter.messageToJson(messageMaker.clientCommand(userName, inputLine.substring(1))));
                     } else {
-                        if (!inputLine.equals("")) {
-                            out.println(converter.messageToJson(messageMaker.message(userName, inputLine)));
-                            System.out.println("Сообщение отправлено");
-                        }
-//                        out.println(converter.messageToJson(messageMaker.message(userName, inputLine)));
-
+                        out.println(converter.messageToJson(messageMaker.message(userName, inputLine)));
                     }
+                    System.out.println("Сообщение отправлено");
                 }
             } catch (IOException e) {
                 connect = new AtomicBoolean(false);
@@ -76,7 +64,7 @@ public class Client {
             }
 //            System.out.println("Ждем входящих сообщений...");
             try {
-                if (!stop.get() && in.ready()) {
+                if (in.ready()) {
                     String remoteInputLine = in.readLine();
 //                    System.out.println(remoteInputLine);
                     Message message = converter.jsonToMessage(remoteInputLine);
