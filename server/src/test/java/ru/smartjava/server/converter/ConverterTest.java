@@ -3,7 +3,6 @@ package ru.smartjava.server.converter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.smartjava.params.Cmd;
-import ru.smartjava.server.converter.Converter;
 import ru.smartjava.server.messages.Message;
 
 import java.text.ParseException;
@@ -15,6 +14,7 @@ public class ConverterTest {
     private final SimpleDateFormat formatter = new SimpleDateFormat("dd/M/yyyy");
 
     Date date;
+
     {
         try {
             date = formatter.parse("07/05/2013");
@@ -30,10 +30,11 @@ public class ConverterTest {
 
     @Test
     void toJson() {
-        Assertions.assertEquals(converter.messageToJson(message),jsonString);
+        Assertions.assertEquals(converter.messageToJson(message), jsonString);
     }
+
     @Test
     void toMessage() {
-        Assertions.assertEquals(converter.jsonToMessage(jsonString),message);
+        Assertions.assertEquals(converter.jsonToMessage(jsonString), message);
     }
 }

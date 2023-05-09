@@ -11,5 +11,5 @@ public interface Broker {
     boolean isNickNameUnique(String nickName);
 
     void sendEveryOneExceptSender(Message message);
-    void run();
+
 }

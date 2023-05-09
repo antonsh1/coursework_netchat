@@ -3,7 +3,6 @@ package ru.smartjava.server.config;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.smartjava.params.Config;
-import ru.smartjava.server.config.ReadServerConfigFile;
 
 public class ReadServerConfigTest {
     private final int port = 8000;
@@ -12,7 +11,7 @@ public class ReadServerConfigTest {
 
     @Test
     void ReadParams() {
-        Assertions.assertEquals(readServerConfigFile.port(),port);
-        Assertions.assertEquals(readServerConfigFile.threadLimit(),threadLimit);
+        Assertions.assertEquals(readServerConfigFile.port(), port);
+        Assertions.assertEquals(readServerConfigFile.threadLimit(), threadLimit);
     }
 }

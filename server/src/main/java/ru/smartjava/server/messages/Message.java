@@ -13,12 +13,12 @@ public class Message {
     private final Boolean disconnect;
 
     public Message(boolean command, String commandValue, String message, Date date, String nickName, boolean disconnect) {
-        this.command = (Boolean) command;
+        this.command = command;
         this.commandValue = commandValue;
         this.message = message;
         this.date = date;
         this.nickName = nickName;
-        this.disconnect = (Boolean) disconnect;
+        this.disconnect = disconnect;
     }
 
     public Date getDate() {

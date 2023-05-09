@@ -1,15 +1,11 @@
 package ru.smartjava.interfaces;
 
-import ru.smartjava.params.Cmd;
-import ru.smartjava.params.Defaults;
 import ru.smartjava.server.messages.Message;
-
-import java.util.Date;
-import java.util.Objects;
 
 public interface Maker {
 
     boolean isExitCommand(Message command);
+
     void printMessage(Message message);
 
     String logIncomingMessage(Message message);

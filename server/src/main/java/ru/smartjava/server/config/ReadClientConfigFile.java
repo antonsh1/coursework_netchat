@@ -9,27 +9,21 @@ import java.util.Properties;
 
 public class ReadClientConfigFile {
 
-    private String configFilePath;
+    private final String configFilePath;
 
     Properties properties = new Properties();
 
+    //Рабочий конструктор
     public ReadClientConfigFile(String name) {
         configFilePath = name + Config.CLIENT_BASE_CONFIG_FILE_PATH;
         this.properties = readFile(configFilePath);
     }
 
+    //Конструктор для теста
     public ReadClientConfigFile() {
         configFilePath = Config.TEST_CLIENT_CONFIG_FILE_PATH;
         this.properties = readFile(configFilePath);
     }
-
-//    public void setFilePath(String filePath) {
-//        configFilePath = filePath;
-//    }
-//    public ReadClientConfigFile client() {
-//        properties = readFile(configFilePath);
-//        return this;
-//    }
 
     public Integer port() {
         int serverPort = 0;

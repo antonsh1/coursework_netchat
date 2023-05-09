@@ -15,16 +15,8 @@ public class MessageHandler implements Handler {
         this.messageBroker = messageBroker;
     }
 
-//    public boolean isClientExit(Message command) {
-//        return Objects.equals(command.getCommand(), Cmd.EXIT);
-//    }
-
     public Message handle(Message command) {
         Message response;
-        System.out.println(command);
-//        System.out.println(Commands.valueOf(command.getCommand()));
-
-//        switch (Commands.valueOf(command.getCommand())) {
         switch (command.getCommand()) {
             case Cmd.CONNECT:
                 if (messageBroker.isNickNameUnique(command.getNickName())) {

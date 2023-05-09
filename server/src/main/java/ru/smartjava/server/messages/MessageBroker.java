@@ -1,14 +1,15 @@
 package ru.smartjava.server.messages;
 
+import ru.smartjava.interfaces.Broker;
+import ru.smartjava.interfaces.Handler;
+import ru.smartjava.interfaces.Maker;
+import ru.smartjava.server.logger.ServerFacadeLog;
+
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import ru.smartjava.interfaces.Broker;
-import ru.smartjava.interfaces.Handler;
-import ru.smartjava.interfaces.Maker;
-import ru.smartjava.server.logger.ServerFacadeLog;
 public class MessageBroker implements Runnable, Broker {
 
     Logger logger = ServerFacadeLog.getLogger();
@@ -60,7 +61,7 @@ public class MessageBroker implements Runnable, Broker {
                         messages.removeAll(commandsMessages);
                         for (Message command : commandsMessages) {
                             mapToClientQueue.get(command.getNickName()).put(messageHandler.handle(command));
-                            if(messageMaker.isExitCommand(command)) {
+                            if (messageMaker.isExitCommand(command)) {
                                 Message message = messageMaker.exitClientMessage(command.getNickName());
                                 messages.add(message);
                             }
