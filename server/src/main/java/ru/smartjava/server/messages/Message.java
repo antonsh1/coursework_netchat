@@ -1,25 +1,24 @@
 package ru.smartjava.server.messages;
 
-import ru.smartjava.enums.Commands;
-
 import java.util.Date;
+import java.util.Objects;
 
 public class Message {
 
     private final Boolean command;
-    private final Commands commandValue;
+    private final String commandValue;
     private final String message;
     private final Date date;
     private final String nickName;
     private final Boolean disconnect;
 
-    public Message(Boolean command, Commands commandValue, String message, Date date, String nickName, Boolean disconnect) {
-        this.command = command;
+    public Message(boolean command, String commandValue, String message, Date date, String nickName, boolean disconnect) {
+        this.command = (Boolean) command;
         this.commandValue = commandValue;
         this.message = message;
         this.date = date;
         this.nickName = nickName;
-        this.disconnect = disconnect;
+        this.disconnect = (Boolean) disconnect;
     }
 
     public Date getDate() {
@@ -30,7 +29,7 @@ public class Message {
         return commandValue;
     }
 
-    public Boolean isCommand() {
+    public boolean isCommand() {
         return command;
     }
 
@@ -42,7 +41,7 @@ public class Message {
         return message;
     }
 
-    public Boolean getDisconnect() {
+    public boolean getDisconnect() {
         return disconnect;
     }
 
@@ -56,5 +55,18 @@ public class Message {
                 ", nickName='" + nickName + '\'' +
                 ", disconnect=" + disconnect +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message1 = (Message) o;
+        return Objects.equals(command, message1.command) && Objects.equals(commandValue, message1.commandValue) && Objects.equals(message, message1.message) && Objects.equals(nickName, message1.nickName) && Objects.equals(disconnect, message1.disconnect);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(command, commandValue, message, nickName, disconnect);
     }
 }

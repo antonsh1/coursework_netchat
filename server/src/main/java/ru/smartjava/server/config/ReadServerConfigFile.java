@@ -1,5 +1,7 @@
 package ru.smartjava.server.config;
 
+import ru.smartjava.params.Config;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -7,25 +9,23 @@ import java.util.Properties;
 
 public class ReadServerConfigFile {
 
-    private final String SERVER_CONFIG_FILE_PATH = "server/src/main/resources/server.xml";
-    private final String PORT_FIELD_NAME = "port";
-    private final String THREAD_LIMIT_NAME = "threadLimit";
+    Properties properties;
+    public ReadServerConfigFile() {
+        properties = readFile(Config.SERVER_CONFIG_FILE_PATH);
+    }
 
-    Properties properties  = new Properties();
-
-    public ReadServerConfigFile server() {
-        properties = readFile(SERVER_CONFIG_FILE_PATH);
-        return this;
+    public ReadServerConfigFile(String filePath) {
+        this.properties = readFile(filePath);
     }
 
     public Integer port() {
         int serverPort = 0;
         try {
-            if (!properties.getProperty(PORT_FIELD_NAME).isEmpty()) {
-                serverPort = Integer.parseInt(properties.getProperty(PORT_FIELD_NAME));
+            if (!properties.getProperty(Config.PORT_FIELD_NAME).isEmpty()) {
+                serverPort = Integer.parseInt(properties.getProperty(Config.PORT_FIELD_NAME));
             }
         } catch (NumberFormatException ne) {
-            System.out.println("Ошибка преобразования порта из файла конфигурации " + ne.getMessage());
+            System.err.println("Ошибка преобразования порта из файла конфигурации " + ne.getMessage());
         }
         return serverPort;
     }
@@ -33,11 +33,11 @@ public class ReadServerConfigFile {
     public Integer threadLimit() {
         int threadLimit = 0;
         try {
-            if (!properties.getProperty(THREAD_LIMIT_NAME).isEmpty()) {
-                threadLimit = Integer.parseInt(properties.getProperty(THREAD_LIMIT_NAME));
+            if (!properties.getProperty(Config.THREAD_LIMIT_NAME).isEmpty()) {
+                threadLimit = Integer.parseInt(properties.getProperty(Config.THREAD_LIMIT_NAME));
             }
         } catch (NumberFormatException ne) {
-            System.out.println("Ошибка преобразования порта из файла конфигурации " + ne.getMessage());
+            System.err.println("Ошибка преобразования порта из файла конфигурации " + ne.getMessage());
         }
         return threadLimit;
     }

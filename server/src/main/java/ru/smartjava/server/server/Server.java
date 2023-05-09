@@ -1,5 +1,7 @@
 package ru.smartjava.server.server;
 
+import ru.smartjava.interfaces.Broker;
+import ru.smartjava.params.Defaults;
 import ru.smartjava.server.messages.MessageBroker;
 
 import java.io.IOException;
@@ -14,48 +16,41 @@ import ru.smartjava.server.config.ReadServerConfigFile;
 public class Server extends Thread {
 
     Logger logger = ServerFacadeLog.getLogger();
-    private final Integer SOCKET_TIMEOUT = 1000;
-    private Integer SERVER_PORT = 8090;
-    private Integer THREAD_LIMIT = 2;
-    private final Integer REJECT_THREAD_POOL = 2;
-    private Integer FULL_THREAD_POOL = THREAD_LIMIT + REJECT_THREAD_POOL;
+    private int FULL_THREAD_POOL;
+    private int SERVER_THREAD_LIMIT;
     private final ServerSocket serverSocket;
-    MessageBroker messageBroker = new MessageBroker();
+    private final Broker messageBroker = new MessageBroker();
 //    private final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 //    private final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(1);
-    ThreadFactory threadFactory = Executors.defaultThreadFactory();
+    private final ThreadFactory threadFactory = Executors.defaultThreadFactory();
 
-    ThreadPoolExecutor threadPoolExecutor;
+    private ThreadPoolExecutor threadPoolExecutor;
     public Server() {
         System.out.println("Старт сервера");
         logger.info("Старт сервера");
-        int port = new ReadServerConfigFile().server().port();
-        if(port == 0) {
-            logger.info("Старт сервера");
-//            System.out.println("используем порт по умолчанию :" + SERVER_PORT);
-            logger.info("используем порт по умолчанию :" + SERVER_PORT);
+        int serverPort = new ReadServerConfigFile().port();
+        if(serverPort == 0) {
+            serverPort = Defaults.SERVER_DEFAULT_PORT;
+            logger.info("используем порт по умолчанию :" + serverPort);
         } else {
-            SERVER_PORT = port;
-//            System.out.println("используем порт из файла конфигурации: " + SERVER_PORT);
-            logger.info("используем порт из файла конфигурации: " + SERVER_PORT);
+            logger.info("используем порт из файла конфигурации: " + serverPort);
         }
 
-        int threadLimit = new ReadServerConfigFile().server().threadLimit();
-        if(threadLimit == 0) {
-            logger.info("используем ограничение потоков по умолчанию :" + THREAD_LIMIT);
+        SERVER_THREAD_LIMIT = new ReadServerConfigFile().threadLimit();
+        if(SERVER_THREAD_LIMIT == 0) {
+            SERVER_THREAD_LIMIT = Defaults.SERVER_DEFAULT_THREAD_LIMIT;
+            logger.info("используем ограничение потоков по умолчанию :" + SERVER_THREAD_LIMIT);
         } else {
-            THREAD_LIMIT = threadLimit;
-            FULL_THREAD_POOL = THREAD_LIMIT + REJECT_THREAD_POOL;
-            logger.info("используем ограничение потоков из файла конфигурации: " + THREAD_LIMIT);
+            logger.info("используем ограничение потоков из файла конфигурации: " + SERVER_THREAD_LIMIT);
         }
-
+        FULL_THREAD_POOL = SERVER_THREAD_LIMIT + Defaults.SERVER_REJECT_THREAD_POOL;
 //        Integer connectionLimit = Integer.parseInt(serverConfig.getProperty("threadLimit"));
 //        private final ExecutorService clientProcessingPool = Executors.newCachedThreadPool();
 //        final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(2);
 
-        new Thread(messageBroker).start();
+        new Thread((Runnable) messageBroker).start();
         try {
-            serverSocket = new ServerSocket(SERVER_PORT);
+            serverSocket = new ServerSocket(serverPort);
             System.out.println("Сервер запущен");
             logger.info("Сервер запущен");
         } catch (IOException e) {
@@ -66,11 +61,9 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-
         threadPoolExecutor = new ThreadPoolExecutor(FULL_THREAD_POOL,FULL_THREAD_POOL,10, TimeUnit.SECONDS,new ArrayBlockingQueue<>(FULL_THREAD_POOL),threadFactory);
-
         try {
-            this.serverSocket.setSoTimeout(SOCKET_TIMEOUT);
+            this.serverSocket.setSoTimeout(Defaults.SERVER_SOCKET_TIMEOUT);
         } catch (IOException e1) {
             //
         }
@@ -78,7 +71,7 @@ public class Server extends Thread {
         while (true) {
             try {
                 final Socket clientSocket = this.serverSocket.accept();
-                if(threadPoolExecutor.getActiveCount() < THREAD_LIMIT) {
+                if(threadPoolExecutor.getActiveCount() < SERVER_THREAD_LIMIT) {
                     ServerClientHandler clientHandler = new ServerClientHandler(clientSocket, messageBroker, false);
                     threadPoolExecutor.execute(clientHandler);
                 } else {

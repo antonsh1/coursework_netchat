@@ -1,9 +1,11 @@
 package ru.smartjava.server.server;
 
+import ru.smartjava.interfaces.Broker;
+import ru.smartjava.interfaces.Handler;
+import ru.smartjava.interfaces.Maker;
 import ru.smartjava.server.converter.Converter;
 import ru.smartjava.server.logger.ServerFacadeLog;
 import ru.smartjava.server.messages.Message;
-import ru.smartjava.server.messages.MessageBroker;
 import ru.smartjava.server.messages.MessageHandler;
 import ru.smartjava.server.messages.MessageMaker;
 
@@ -27,14 +29,14 @@ public class ServerClientHandler implements Runnable {
     private String clientName;
     private final Socket clientSocket;
     private final Converter converter = Converter.getConverter();
-    private final MessageMaker messageMaker = MessageMaker.getMessageMaker();
-    private final MessageHandler messageHandler;
-    private final MessageBroker messageBroker;
+    private final Maker messageMaker = MessageMaker.getMessageMaker();
+    private final Handler messageHandler;
+    private final Broker messageBroker;
     private final BlockingDeque<Message> toClientQueue = new LinkedBlockingDeque<>();
     private final BlockingDeque<Message> fromClientQueue = new LinkedBlockingDeque<>();
-    private final Boolean reject;
+    private final boolean reject;
 
-    public ServerClientHandler(Socket clientSocket, MessageBroker messageBroker, Boolean reject) {
+    public ServerClientHandler(Socket clientSocket, Broker messageBroker, boolean reject) {
         this.messageBroker = messageBroker;
         this.messageHandler = new MessageHandler(messageBroker);
         this.clientSocket = clientSocket;
@@ -58,7 +60,8 @@ public class ServerClientHandler implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        logger.info(String.format("Открываем поток обработки подключения от %s:%s", clientSocket.getInetAddress(), clientSocket.getPort()));
+        logger.info("Открываем поток обработки подключения от " + clientSocket.getInetAddress().toString() + ":" + clientSocket.getPort());
+
         try {
             Message initialMessage = converter.jsonToMessage(in.readLine());
             logger.info(messageMaker.logIncomingMessage(initialMessage));
@@ -82,8 +85,8 @@ public class ServerClientHandler implements Runnable {
                         Message send = toClientQueue.removeLast();
                         logger.info(messageMaker.logOutgoingMessage(send, clientName));
                         out.println(converter.messageToJson(send));
-                        if (messageHandler.isClientExit(send)) {
-                            disconnect = true;
+                        if (messageMaker.isExitCommand(send)) {
+                            disconnect = send.getDisconnect();
                         }
                     } catch (NoSuchElementException nsl) {
 //                        System.out.println("Нет сообщений для отправки " + nsl.getMessage());

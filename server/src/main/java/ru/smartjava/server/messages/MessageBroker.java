@@ -4,13 +4,17 @@ import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import ru.smartjava.interfaces.Broker;
+import ru.smartjava.interfaces.Handler;
+import ru.smartjava.interfaces.Maker;
 import ru.smartjava.server.logger.ServerFacadeLog;
-public class MessageBroker implements Runnable {
+public class MessageBroker implements Runnable, Broker {
 
     Logger logger = ServerFacadeLog.getLogger();
     private final Integer SLEEP_TIMEOUT = 500;
-    private final MessageHandler messageHandler = new MessageHandler(this);
-    private final MessageMaker messageMaker = MessageMaker.getMessageMaker();
+    private final Handler messageHandler = new MessageHandler(this);
+    private final Maker messageMaker = MessageMaker.getMessageMaker();
     private final Map<String, BlockingDeque<Message>> mapFromClientQueue = new LinkedHashMap<>();
     private final Map<String, BlockingDeque<Message>> mapToClientQueue = new LinkedHashMap<>();
 
@@ -24,7 +28,7 @@ public class MessageBroker implements Runnable {
         mapToClientQueue.remove(clientName);
     }
 
-    public Boolean isNickNameUnique(String nickName) {
+    public boolean isNickNameUnique(String nickName) {
         return mapToClientQueue.keySet().stream().noneMatch(name -> Objects.equals(name, nickName)) && !Objects.equals(nickName, "");
     }
 
@@ -56,7 +60,7 @@ public class MessageBroker implements Runnable {
                         messages.removeAll(commandsMessages);
                         for (Message command : commandsMessages) {
                             mapToClientQueue.get(command.getNickName()).put(messageHandler.handle(command));
-                            if(messageHandler.isClientExit(command)) {
+                            if(messageMaker.isExitCommand(command)) {
                                 Message message = messageMaker.exitClientMessage(command.getNickName());
                                 messages.add(message);
                             }

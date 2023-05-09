@@ -1,45 +1,42 @@
 package ru.smartjava.server.messages;
 
-import ru.smartjava.enums.Commands;
+import ru.smartjava.interfaces.Broker;
+import ru.smartjava.interfaces.Handler;
+import ru.smartjava.interfaces.Maker;
+import ru.smartjava.params.Cmd;
 
-import java.util.Objects;
+public class MessageHandler implements Handler {
 
-public class MessageHandler {
+    private final Broker messageBroker;
 
-    private final MessageBroker messageBroker;
+    private final Maker messageMaker = MessageMaker.getMessageMaker();
 
-    private final MessageMaker messageMaker = MessageMaker.getMessageMaker();
-
-    public MessageHandler(MessageBroker messageBroker) {
+    public MessageHandler(Broker messageBroker) {
         this.messageBroker = messageBroker;
     }
 
-    final String CONNECT_MSG = "connect";
-    final String EXIT_CMD = "exit";
-    final String INFO_CMD = "info";
-
-    public Boolean isClientExit(Message command) {
-        return Objects.equals(command.getCommand(), Commands.EXIT.toString());
-    }
+//    public boolean isClientExit(Message command) {
+//        return Objects.equals(command.getCommand(), Cmd.EXIT);
+//    }
 
     public Message handle(Message command) {
         Message response;
         System.out.println(command);
-        System.out.println(Commands.valueOf(command.getCommand()));
+//        System.out.println(Commands.valueOf(command.getCommand()));
 
 //        switch (Commands.valueOf(command.getCommand())) {
         switch (command.getCommand()) {
-            case Commands.CONNECT:
+            case Cmd.CONNECT:
                 if (messageBroker.isNickNameUnique(command.getNickName())) {
                     response = messageMaker.connectAccepted(command.getNickName());
                 } else {
                     response = messageMaker.connectRejected(command.getNickName());
                 }
                 break;
-            case EXIT:
-                response = messageMaker.disconnect(command.getNickName(), Commands.EXIT.toString());
+            case Cmd.EXIT:
+                response = messageMaker.disconnect(command.getNickName(), Cmd.EXIT);
                 break;
-            case INFO:
+            case Cmd.INFO:
                 response = command;
                 break;
             default:

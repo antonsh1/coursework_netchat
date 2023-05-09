@@ -1,0 +1,8 @@
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>This is a comment</comment>
+    <entry key="port">8000</entry>
+    <entry key="threadLimit">10</entry>
+    <entry key="other1">WhatEver</entry>
+    <entry key="other2">WhatEver</entry>
+</properties>

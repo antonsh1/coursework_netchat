@@ -16,7 +16,6 @@ public class ServerFacadeLog {
                 if (logger == null) {
                     logger = Logger.getLogger("Server");
                     try {
-
                         System.setProperty("java.util.logging.SimpleFormatter.format",
                                 "[%1$tF %1$tT] [%4$-7s] %5$s %n");
                         FileHandler fh = new FileHandler(logFilePath, true);

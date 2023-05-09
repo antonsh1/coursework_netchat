@@ -1,5 +1,7 @@
 package ru.smartjava.client;
 
+import ru.smartjava.interfaces.Maker;
+import ru.smartjava.params.Defaults;
 import ru.smartjava.server.config.ReadClientConfigFile;
 import ru.smartjava.server.converter.Converter;
 import ru.smartjava.server.logger.ClientFacadeLog;
@@ -22,11 +24,7 @@ public class Client {
 
     Logger logger;
     ReadClientConfigFile configFile;
-    private int SERVER_PORT = 8090;
-    private String SERVER_HOST = "localhost";
-    private final Integer SOCKET_TIMEOUT = 300;
-    private final Integer SLEEP_TIMEOUT = 500;
-    private final MessageMaker messageMaker = MessageMaker.getMessageMaker();
+    private final Maker messageMaker = MessageMaker.getMessageMaker();
     private final BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
     private AtomicBoolean connect = new AtomicBoolean(true);
     private AtomicBoolean stop = new AtomicBoolean(false);
@@ -72,7 +70,7 @@ public class Client {
     void inputMessagesHandle() {
         while (connect.get()) {
             try {
-                Thread.sleep(SLEEP_TIMEOUT);
+                Thread.sleep(Defaults.CLIENT_SLEEP_TIMEOUT);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -109,31 +107,31 @@ public class Client {
     public void start() {
 
         logger.info("Запуск клиента");
-        int port = configFile.client().port();
-        if (port == 0) {
-            System.out.println("используем порт по умолчанию :" + SERVER_PORT);
-            logger.info("используем порт по умолчанию :" + SERVER_PORT);
+        int clientPort = configFile.port();
+        if (clientPort == 0) {
+            clientPort = Defaults.CLIENT_DEFAULT_PORT;
+            System.out.println("используем порт по умолчанию :" + clientPort);
+            logger.info("используем порт по умолчанию :" + clientPort);
         } else {
-            SERVER_PORT = port;
-            System.out.println("используем порт из файла конфигурации: " + SERVER_PORT);
-            logger.info("используем порт из файла конфигурации: " + SERVER_PORT);
+            System.out.println("используем порт из файла конфигурации: " + clientPort);
+            logger.info("используем порт из файла конфигурации: " + clientPort);
         }
-        String host = configFile.client().host();
-        if (Objects.equals(host, "")) {
-            System.out.println("используем имя подключения по умолчанию :" + SERVER_HOST);
-            logger.info("используем имя подключения по умолчанию :" + SERVER_HOST);
+        String clientHost = configFile.host();
+        if (Objects.equals(clientHost, "")) {
+            clientHost = Defaults.CLIENT_DEFAULT_HOST;
+            System.out.println("используем имя подключения по умолчанию :" + clientHost);
+            logger.info("используем имя подключения по умолчанию :" + clientHost);
         } else {
-            SERVER_HOST = host;
-            System.out.println("используем имя подключения из файла конфигурации: " + SERVER_HOST);
-            logger.info("используем имя подключения из файла конфигурации: " + SERVER_HOST);
+            System.out.println("используем имя подключения из файла конфигурации: " + clientHost);
+            logger.info("используем имя подключения из файла конфигурации: " + clientHost);
         }
         String hostIp;
         //Получаем ip хоста
         try {
-            InetAddress inetAddress = InetAddress.getByName(SERVER_HOST);
+            InetAddress inetAddress = InetAddress.getByName(clientHost);
             hostIp = inetAddress.getHostAddress();
 //            System.out.println();
-            logger.info(SERVER_HOST + ", ip address: " + inetAddress.getHostAddress());
+            logger.info(clientHost + ", ip address: " + inetAddress.getHostAddress());
 //            System.out.println();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
@@ -148,8 +146,8 @@ public class Client {
         }
 
         try {
-            clientSocket = new Socket(hostIp, SERVER_PORT);
-            clientSocket.setSoTimeout(SOCKET_TIMEOUT);
+            clientSocket = new Socket(hostIp, clientPort);
+            clientSocket.setSoTimeout(Defaults.CLIENT_SOCKET_TIMEOUT);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (SocketException socketException) {
